@@ -21,11 +21,11 @@ class OdriveMotorControl(Node):
         # Connect to Odrive
         self.find_odrive()
 
-        self.tire_tread         = 0.32   
-        self.target_linear_vel  = 0.0                                          #[m/s]
-        self.target_angular_vel = 0.0   
+        self.tire_tread         = 0.425 #[m]
+        self.target_linear_vel  = 0.0   #[m/s]
+        self.target_angular_vel = 0.0   #[rad/s]
 
-        self.tire_diameter      = 0.165    
+        self.tire_diameter      = 0.2   #[m]  
         self.tire_circumference = math.pi * self.tire_diameter  
 
         self.timer = self.create_timer(0.1, self.update) 
