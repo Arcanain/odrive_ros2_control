@@ -73,36 +73,6 @@ class OdriveMotorControl(Node):
 
         print("軸0のトルク: {} Nm".format(torque_0))
         print("軸1のトルク: {} Nm".format(torque_1))
-
-    def odrive_control(self):
-        self.get_logger().info("start odrive control...")
-        rate = self.create_rate(50)
-        while rclpy.ok():
-            right_vel, left_vel = self.calc_relative_vel(self.target_linear_vel, self.target_angular_vel)
-            
-            try:
-                # Get current position
-                #self.calcodom()
-
-                # Set velocity
-                self.get_logger().info("try...")
-                self.odrv0.axis0.controller.input_vel = right_vel
-                self.odrv0.axis1.controller.input_vel = -left_vel
-
-                #self.odrv0.axis0.controller.input_vel = 1
-                #self.odrv0.axis1.controller.input_vel = -1
-                
-                # Time sleep
-                rate.sleep()
-            except AttributeError as error:
-                self.get_logger().info("shutdown...")
-                self.get_logger().error(f'{error}')
-                rclpy.shutdown()
-            except KeyboardInterrupt:
-                self.get_logger().info("shutdown...")
-                self.odrv0.axis0.controller.input_vel = 0
-                self.odrv0.axis1.controller.input_vel = 0
-                rclpy.shutdown()
         
     def calc_relative_vel(self, target_linear_vel, target_angular_vel):
         # Convert to each circumferential velocity
