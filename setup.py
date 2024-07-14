@@ -10,7 +10,6 @@ setup(
     py_modules=[
         'python_programs.talker',
         'python_programs.listener',
-        'python_programs.keyboard_teleop',
         'python_programs.odrive_twist_driver',
     ],
     data_files=[
@@ -30,7 +29,6 @@ setup(
         'console_scripts': [
             'my_talker= python_programs.talker:main',
             'my_listener= python_programs.listener:main',
-            'keyboard_teleop= python_programs.keyboard_teleop:main',
             'control_odrive= python_programs.odrive_twist_driver:main',
         ],
     },
