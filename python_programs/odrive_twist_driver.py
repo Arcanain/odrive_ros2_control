@@ -104,7 +104,8 @@ class OdriveMotorControl(Node):
         self.odom_to_baselink_msg.transform.rotation.w = 1.0
 
         # subscriber cmd_vel
-        self.create_subscription(Twist, 'cmd_vel', self.callback_vel, 10)
+        #self.create_subscription(Twist, 'cmd_vel', self.callback_vel, 10)
+        self.create_subscription(Twist, 'cmd_vel_joystick', self.callback_vel, 10)
 
         self.timer = self.create_timer(0.1, self.update) 
 
