@@ -1,0 +1,24 @@
+{
+  "configurations": [
+    {
+      "browse": {
+        "databaseFilename": "${default}",
+        "limitSymbolsToIncludedHeaders": false
+      },
+      "includePath": [
+        "/home/deepstation/ros2_ws/install/ublox_gps/include/**",
+        "/home/deepstation/ros2_ws/install/ublox_msgs/include/**",
+        "/home/deepstation/ros2_ws/install/ublox_serialization/include/**",
+        "/home/deepstation/ros2_ws/install/path_smoother/include/**",
+        "/opt/ros/humble/include/**",
+        "/usr/include/**"
+      ],
+      "name": "ROS",
+      "intelliSenseMode": "gcc-x64",
+      "compilerPath": "/usr/bin/gcc",
+      "cStandard": "gnu11",
+      "cppStandard": "c++14"
+    }
+  ],
+  "version": 4
+}
