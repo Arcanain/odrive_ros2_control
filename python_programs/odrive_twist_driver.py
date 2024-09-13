@@ -134,22 +134,6 @@ class OdriveMotorControl(Node):
     def odrive_setup(self):
         self.get_logger().info("start setup...")
         self.get_logger().info("%s" % self.odrv0.vbus_voltage)
-        '''
-        self.odrv0.axis0.pos_vel_mapper.config.offset = 0.0 # change this if you want the meaning of "axis position zero" to differ from the encoder's zero
-        self.odrv0.axis1.pos_vel_mapper.config.offset = 0.0 # change this if you want the meaning of "axis position zero" to differ from the encoder's zero
-
-        self.odrv0.axis0.pos_vel_mapper.config.offset_valid = True
-        self.odrv0.axis1.pos_vel_mapper.config.offset_valid = True
-
-        self.odrv0.axis0.pos_vel_mapper.config.approx_init_pos = 0.0 # change this if the guaranteed startup range is different from [-0.5, +0.5]. This is in the axis reference frame (see offset above).
-        self.odrv0.axis1.pos_vel_mapper.config.approx_init_pos = 0.0 # change this if the guaranteed startup range is different from [-0.5, +0.5]. This is in the axis reference frame (see offset above).
-
-        self.odrv0.axis0.pos_vel_mapper.config.approx_init_pos_valid = True
-        self.odrv0.axis1.pos_vel_mapper.config.approx_init_pos_valid = True
-
-        self.odrv0.axis0.controller.config.absolute_setpoints = True
-        self.odrv0.axis1.controller.config.absolute_setpoints = True
-        '''
         # In __init__
         self.initial_pos_r = 0.0
         self.initial_pos_l = 0.0
@@ -270,7 +254,7 @@ class OdriveMotorControl(Node):
         
         # Read message content and assign it to
         # corresponding tf variables
-        self.map_to_odom_msg.header.stamp = self.get_clock().now().to_msg()
+        self.map_to_odom_msg.header.stamp = current_time
 
         # Turtle only exists in 2D, thus we get x and y translation
         # coordinates from the message and set the z coordinate to 0
@@ -288,47 +272,6 @@ class OdriveMotorControl(Node):
         self.map_to_odom_msg.transform.rotation.w = odom_quat[3]
 
         self.map_broadcaster.sendTransform(self.map_to_odom_msg)
-        '''
-        # Read message content and assign it to
-        # corresponding tf variables
-        self.odom_to_baselink_msg.header.stamp = self.get_clock().now().to_msg()
-
-        # Turtle only exists in 2D, thus we get x and y translation
-        # coordinates from the message and set the z coordinate to 0
-        self.odom_to_baselink_msg.transform.translation.x = self.x
-        self.odom_to_baselink_msg.transform.translation.y = self.y
-        self.odom_to_baselink_msg.transform.translation.z = 0.0
-
-        # For the same reason, turtle can only rotate around one axis
-        # and this why we set rotation in x and y to 0 and obtain
-        # rotation in z axis from the message
-        self.odom_to_baselink_msg.transform.rotation.x = q[0]
-        self.odom_to_baselink_msg.transform.rotation.y = q[1]
-        self.odom_to_baselink_msg.transform.rotation.z = q[2]
-        self.odom_to_baselink_msg.transform.rotation.w = q[3]
-        
-        self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
-        '''
-        '''
-        odom_quat = tf_transformations.quaternion_from_euler(0.0, 0.0, 0.0)
-        self.map_broadcaster.sendTransform(
-            (0.0, 0.0, 0.0),
-            odom_quat,
-            self.get_clock().now().to_msg(),
-            "odom",
-            "map"
-        )
-        '''
-
-        '''
-        self.odom_broadcaster.sendTransform(
-            (self.x, self.y, 0.0),
-            q,
-            self.get_clock().now().to_msg(),
-            "base_link",
-            "odom"
-        )
-        '''
 
         
         self.odom_to_baselink_msg.transform.translation.x = self.x
@@ -337,20 +280,11 @@ class OdriveMotorControl(Node):
         self.odom_to_baselink_msg.transform.rotation.w = q[3]
         self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
         
-
-        """
-        self.tf_msg.transform.translation.x = self.x
-        self.tf_msg.transform.translation.y = self.y
-        self.tf_msg.transform.rotation.z = q[2]
-        self.tf_msg.transform.rotation.w = q[3]
-        self.tf_publisher.sendTransform(self.tf_msg)
-        """
-
         #########################
         # Publish Odometry Path #
         #########################
         temp_pose = PoseStamped()
-        temp_pose.header.stamp = self.get_clock().now().to_msg()
+        temp_pose.header.stamp = current_time
         temp_pose.header.frame_id = "map"
         temp_pose.pose.position.x = self.x
         temp_pose.pose.position.y = self.y
@@ -361,7 +295,7 @@ class OdriveMotorControl(Node):
 
         # creat path data
         self.path = Path()
-        self.path.header.stamp = self.get_clock().now().to_msg()
+        self.path.header.stamp = current_time
         self.path.header.frame_id = "map"
         self.path.poses = self.poses_list
 

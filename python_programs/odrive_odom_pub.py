@@ -134,22 +134,6 @@ class OdriveMotorControl(Node):
     def odrive_setup(self):
         self.get_logger().info("start setup...")
         self.get_logger().info("%s" % self.odrv0.vbus_voltage)
-        '''
-        self.odrv0.axis0.pos_vel_mapper.config.offset = 0.0 # change this if you want the meaning of "axis position zero" to differ from the encoder's zero
-        self.odrv0.axis1.pos_vel_mapper.config.offset = 0.0 # change this if you want the meaning of "axis position zero" to differ from the encoder's zero
-
-        self.odrv0.axis0.pos_vel_mapper.config.offset_valid = True
-        self.odrv0.axis1.pos_vel_mapper.config.offset_valid = True
-
-        self.odrv0.axis0.pos_vel_mapper.config.approx_init_pos = 0.0 # change this if the guaranteed startup range is different from [-0.5, +0.5]. This is in the axis reference frame (see offset above).
-        self.odrv0.axis1.pos_vel_mapper.config.approx_init_pos = 0.0 # change this if the guaranteed startup range is different from [-0.5, +0.5]. This is in the axis reference frame (see offset above).
-
-        self.odrv0.axis0.pos_vel_mapper.config.approx_init_pos_valid = True
-        self.odrv0.axis1.pos_vel_mapper.config.approx_init_pos_valid = True
-
-        self.odrv0.axis0.controller.config.absolute_setpoints = True
-        self.odrv0.axis1.controller.config.absolute_setpoints = True
-        '''
         # In __init__
         self.initial_pos_r = 0.0
         self.initial_pos_l = 0.0
