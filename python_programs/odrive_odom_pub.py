@@ -254,7 +254,7 @@ class OdriveMotorControl(Node):
         
         # Read message content and assign it to
         # corresponding tf variables
-        self.map_to_odom_msg.header.stamp = current_time
+        self.map_to_odom_msg.header.stamp = self.get_clock().now().to_msg()
 
         # Turtle only exists in 2D, thus we get x and y translation
         # coordinates from the message and set the z coordinate to 0
@@ -279,12 +279,12 @@ class OdriveMotorControl(Node):
         self.odom_to_baselink_msg.transform.rotation.z = q[2]
         self.odom_to_baselink_msg.transform.rotation.w = q[3]
         self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
-        
+
         #########################
         # Publish Odometry Path #
         #########################
         temp_pose = PoseStamped()
-        temp_pose.header.stamp = current_time
+        temp_pose.header.stamp = self.get_clock().now().to_msg()
         temp_pose.header.frame_id = "map"
         temp_pose.pose.position.x = self.x
         temp_pose.pose.position.y = self.y
@@ -295,33 +295,11 @@ class OdriveMotorControl(Node):
 
         # creat path data
         self.path = Path()
-        self.path.header.stamp = current_time
+        self.path.header.stamp = self.get_clock().now().to_msg()
         self.path.header.frame_id = "map"
         self.path.poses = self.poses_list
 
         self.odom_path_publisher.publish(self.path)
-
-        #self.get_logger().info("x : %s" % self.x)
-        #self.get_logger().info("y : %s" % self.y)
-        #print(delta_pos_r)
-        #print(delta_pos_l)
-        #print(delta_pos_r_m)
-        #print(delta_pos_l_m)
-        #print(d)
-        #print(th)
-        #print(xd)
-        #print(yd)
-        #print(self.x)
-        #print(self.y)
-        #print(self.theta)
-        #print(self.odrv0.axis0.encoder.pos_estimate * 90.0)
-        #print(self.vel_r)
-        #print(self.vel_l)
-        #print(self.vel_l)
-        #print(v)
-        #print(w)
-        #print(math.cos(self.theta)*xd - math.sin(self.theta)*yd)
-        #print(math.sin(self.theta)*xd + math.cos(self.theta)*yd)
     
     def fini(self):
         self.get_logger().info("shutdown...")
