@@ -288,47 +288,6 @@ class OdriveMotorControl(Node):
         self.map_to_odom_msg.transform.rotation.w = odom_quat[3]
 
         self.map_broadcaster.sendTransform(self.map_to_odom_msg)
-        '''
-        # Read message content and assign it to
-        # corresponding tf variables
-        self.odom_to_baselink_msg.header.stamp = self.get_clock().now().to_msg()
-
-        # Turtle only exists in 2D, thus we get x and y translation
-        # coordinates from the message and set the z coordinate to 0
-        self.odom_to_baselink_msg.transform.translation.x = self.x
-        self.odom_to_baselink_msg.transform.translation.y = self.y
-        self.odom_to_baselink_msg.transform.translation.z = 0.0
-
-        # For the same reason, turtle can only rotate around one axis
-        # and this why we set rotation in x and y to 0 and obtain
-        # rotation in z axis from the message
-        self.odom_to_baselink_msg.transform.rotation.x = q[0]
-        self.odom_to_baselink_msg.transform.rotation.y = q[1]
-        self.odom_to_baselink_msg.transform.rotation.z = q[2]
-        self.odom_to_baselink_msg.transform.rotation.w = q[3]
-        
-        self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
-        '''
-        '''
-        odom_quat = tf_transformations.quaternion_from_euler(0.0, 0.0, 0.0)
-        self.map_broadcaster.sendTransform(
-            (0.0, 0.0, 0.0),
-            odom_quat,
-            self.get_clock().now().to_msg(),
-            "odom",
-            "map"
-        )
-        '''
-
-        '''
-        self.odom_broadcaster.sendTransform(
-            (self.x, self.y, 0.0),
-            q,
-            self.get_clock().now().to_msg(),
-            "base_link",
-            "odom"
-        )
-        '''
 
         
         self.odom_to_baselink_msg.transform.translation.x = self.x
@@ -336,15 +295,6 @@ class OdriveMotorControl(Node):
         self.odom_to_baselink_msg.transform.rotation.z = q[2]
         self.odom_to_baselink_msg.transform.rotation.w = q[3]
         self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
-        
-
-        """
-        self.tf_msg.transform.translation.x = self.x
-        self.tf_msg.transform.translation.y = self.y
-        self.tf_msg.transform.rotation.z = q[2]
-        self.tf_msg.transform.rotation.w = q[3]
-        self.tf_publisher.sendTransform(self.tf_msg)
-        """
 
         #########################
         # Publish Odometry Path #
@@ -366,28 +316,6 @@ class OdriveMotorControl(Node):
         self.path.poses = self.poses_list
 
         self.odom_path_publisher.publish(self.path)
-
-        #self.get_logger().info("x : %s" % self.x)
-        #self.get_logger().info("y : %s" % self.y)
-        #print(delta_pos_r)
-        #print(delta_pos_l)
-        #print(delta_pos_r_m)
-        #print(delta_pos_l_m)
-        #print(d)
-        #print(th)
-        #print(xd)
-        #print(yd)
-        #print(self.x)
-        #print(self.y)
-        #print(self.theta)
-        #print(self.odrv0.axis0.encoder.pos_estimate * 90.0)
-        #print(self.vel_r)
-        #print(self.vel_l)
-        #print(self.vel_l)
-        #print(v)
-        #print(w)
-        #print(math.cos(self.theta)*xd - math.sin(self.theta)*yd)
-        #print(math.sin(self.theta)*xd + math.cos(self.theta)*yd)
     
     def fini(self):
         self.get_logger().info("shutdown...")
