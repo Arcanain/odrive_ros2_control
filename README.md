@@ -96,7 +96,6 @@ Connect to Odrive Success!!!
 ```
 
 ## rviz
-
 ![alt text](<Screenshot from 2024-09-13 20-34-56.png>)
 
 
