@@ -17,12 +17,6 @@ def generate_launch_description():
             output='screen'
         ),
         Node(
-            package='keyboard_teleop',
-            executable='keyboard_teleop',
-            name='keyboard_teleop',
-            output='screen'
-        ),
-        Node(
             package='rviz2',
             executable='rviz2',
             name='rviz2',

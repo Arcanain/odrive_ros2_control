@@ -1,5 +1,6 @@
 from setuptools import find_packages, setup
 import os
+from glob import glob
 
 package_name = 'odrive_ros2_control'
 
@@ -18,6 +19,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), ['launch/odrive_keyboard_control.py']),
         (os.path.join('share', package_name, 'launch'), ['launch/odrive_ps4_control.py']),
+        (os.path.join('share', package_name, 'rviz'), glob('rviz/*')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
