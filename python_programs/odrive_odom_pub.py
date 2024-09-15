@@ -18,7 +18,7 @@ import math
 
 class OdriveMotorControl(Node):
     def __init__(self):
-        super().__init__('odrive_twist_driver')
+        super().__init__('odrive_odom_pub')
 
         
 
@@ -77,32 +77,6 @@ class OdriveMotorControl(Node):
         self.odom_msg.twist.twist.angular.y = 0.0 # or pitch... only yaw
         self.odom_msg.twist.twist.angular.z = 0.0
 
-        # setup transform
-        self.map_broadcaster  = tf2_ros.TransformBroadcaster(self)
-        self.odom_broadcaster = tf2_ros.TransformBroadcaster(self)
-
-        self.map_to_odom_msg = TransformStamped()
-        self.map_to_odom_msg.header.frame_id = "map"
-        self.map_to_odom_msg.child_frame_id  = "odom"
-        self.map_to_odom_msg.transform.translation.x = 0.0
-        self.map_to_odom_msg.transform.translation.y = 0.0
-        self.map_to_odom_msg.transform.translation.z = 0.0
-        self.map_to_odom_msg.transform.rotation.x = 0.0
-        self.map_to_odom_msg.transform.rotation.y = 0.0
-        self.map_to_odom_msg.transform.rotation.z = 0.0
-        self.map_to_odom_msg.transform.rotation.w = 1.0
-
-        self.odom_to_baselink_msg = TransformStamped()
-        self.odom_to_baselink_msg.header.frame_id = "map"
-        self.odom_to_baselink_msg.child_frame_id  = "base_link"
-        self.odom_to_baselink_msg.transform.translation.x = 0.0
-        self.odom_to_baselink_msg.transform.translation.y = 0.0
-        self.odom_to_baselink_msg.transform.translation.z = 0.0
-        self.odom_to_baselink_msg.transform.rotation.x = 0.0
-        self.odom_to_baselink_msg.transform.rotation.y = 0.0
-        self.odom_to_baselink_msg.transform.rotation.z = 0.0
-        self.odom_to_baselink_msg.transform.rotation.w = 1.0
-
         # subscriber cmd_vel
         self.create_subscription(Twist, 'cmd_vel', self.callback_vel, 50)
         #self.create_subscription(Twist, 'cmd_vel_joystick', self.callback_vel, 10)
@@ -110,10 +84,7 @@ class OdriveMotorControl(Node):
         self.timer = self.create_timer(0.05, self.update) 
 
         # publish odom
-        self.odom_publisher = self.create_publisher(Odometry, "odom", 100)
-
-        # publish odom_path
-        self.odom_path_publisher = self.create_publisher(Path, "odom_path", 100)
+        self.odom_publisher = self.create_publisher(Odometry, "odrive_odom", 50)
 
     def callback_vel(self, msg):
         #self.get_logger().info('Callback received a velocity message.')
@@ -247,59 +218,6 @@ class OdriveMotorControl(Node):
         self.odom_msg.twist.twist.linear.x  = v
         self.odom_msg.twist.twist.angular.z = w
         self.odom_publisher.publish(self.odom_msg)
-
-        ######################################
-        # transform odom_frame to base_frame #
-        ######################################
-        
-        # Read message content and assign it to
-        # corresponding tf variables
-        self.map_to_odom_msg.header.stamp = self.get_clock().now().to_msg()
-
-        # Turtle only exists in 2D, thus we get x and y translation
-        # coordinates from the message and set the z coordinate to 0
-        self.map_to_odom_msg.transform.translation.x = 0.0
-        self.map_to_odom_msg.transform.translation.y = 0.0
-        self.map_to_odom_msg.transform.translation.z = 0.0
-
-        # For the same reason, turtle can only rotate around one axis
-        # and this why we set rotation in x and y to 0 and obtain
-        # rotation in z axis from the message
-        odom_quat = tf_transformations.quaternion_from_euler(0.0, 0.0, 0.0)
-        self.map_to_odom_msg.transform.rotation.x = odom_quat[0]
-        self.map_to_odom_msg.transform.rotation.y = odom_quat[1]
-        self.map_to_odom_msg.transform.rotation.z = odom_quat[2]
-        self.map_to_odom_msg.transform.rotation.w = odom_quat[3]
-
-        self.map_broadcaster.sendTransform(self.map_to_odom_msg)
-
-        
-        self.odom_to_baselink_msg.transform.translation.x = self.x
-        self.odom_to_baselink_msg.transform.translation.y = self.y
-        self.odom_to_baselink_msg.transform.rotation.z = q[2]
-        self.odom_to_baselink_msg.transform.rotation.w = q[3]
-        self.odom_broadcaster.sendTransform(self.odom_to_baselink_msg)
-
-        #########################
-        # Publish Odometry Path #
-        #########################
-        temp_pose = PoseStamped()
-        temp_pose.header.stamp = self.get_clock().now().to_msg()
-        temp_pose.header.frame_id = "map"
-        temp_pose.pose.position.x = self.x
-        temp_pose.pose.position.y = self.y
-        temp_pose.pose.orientation.z = q[2]
-        temp_pose.pose.orientation.w = q[3]
-
-        self.poses_list.append(temp_pose)
-
-        # creat path data
-        self.path = Path()
-        self.path.header.stamp = self.get_clock().now().to_msg()
-        self.path.header.frame_id = "map"
-        self.path.poses = self.poses_list
-
-        self.odom_path_publisher.publish(self.path)
     
     def fini(self):
         self.get_logger().info("shutdown...")
