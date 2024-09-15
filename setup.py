@@ -12,13 +12,13 @@ setup(
         'python_programs.talker',
         'python_programs.listener',
         'python_programs.odrive_twist_driver',
+        'python_programs.odrive_odom_pub',
     ],
     data_files=[
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
-        (os.path.join('share', package_name, 'launch'), ['launch/odrive_keyboard_control.py']),
-        (os.path.join('share', package_name, 'launch'), ['launch/odrive_ps4_control.py']),
+        (os.path.join('share', package_name, 'launch'), glob('launch/*.py')),
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*')),
     ],
     install_requires=['setuptools'],
@@ -33,6 +33,7 @@ setup(
             'my_talker= python_programs.talker:main',
             'my_listener= python_programs.listener:main',
             'control_odrive= python_programs.odrive_twist_driver:main',
+            'control_odrive_and_odom_pub= python_programs.odrive_odom_pub:main',
         ],
     },
 )
