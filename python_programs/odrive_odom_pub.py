@@ -27,10 +27,10 @@ class OdriveMotorControl(Node):
         self.find_odrive()
         
         # setup parameter
-        self.tire_tread         = 0.425                                        #[m] distance between wheel centres
+        self.tire_tread         = 0.42                                         #[m] distance between wheel centres
         self.target_linear_vel  = 0.0                                          #[m/s]
         self.target_angular_vel = 0.0                                          #[rad/s]
-        self.tire_diameter      = 0.2                                          #[m]
+        self.tire_diameter      = 0.215                                        #[m]
         self.right_wheel_radius = self.tire_diameter                           #[m]
         self.left_wheel_radius  = self.tire_diameter                           #[m]
         self.encoder_cpr        = 90.0                                         #[count]
@@ -89,7 +89,7 @@ class OdriveMotorControl(Node):
     def callback_vel(self, msg):
         #self.get_logger().info('Callback received a velocity message.')
         #self.get_logger().info('I heard: "%s"' % msg.linear.x)
-        self.target_linear_vel = msg.linear.x
+        self.target_linear_vel = - msg.linear.x
         self.target_angular_vel = msg.angular.z
 
     def find_odrive(self):

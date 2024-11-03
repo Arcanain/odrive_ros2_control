@@ -118,7 +118,7 @@ class OdriveMotorControl(Node):
     def callback_vel(self, msg):
         #self.get_logger().info('Callback received a velocity message.')
         #self.get_logger().info('I heard: "%s"' % msg.linear.x)
-        self.target_linear_vel = msg.linear.x
+        self.target_linear_vel = - msg.linear.x
         self.target_angular_vel = msg.angular.z
 
     def find_odrive(self):
