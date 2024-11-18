@@ -47,7 +47,8 @@ class OdriveMotorControl(Node):
         # store current location to be updated. 
         self.x = 0.0     #[m]
         self.y = 0.0     #[m]
-        self.theta = 0.0 #[rad]
+        self.theta = math.pi #[rad]
+        #self.theta = 0.0 #[rad]
 
         
         self.poses_list = []
@@ -84,12 +85,12 @@ class OdriveMotorControl(Node):
         self.timer = self.create_timer(0.05, self.update) 
 
         # publish odom
-        self.odom_publisher = self.create_publisher(Odometry, "odrive_odom", 50)
+        self.odom_publisher = self.create_publisher(Odometry, "odrive_odom", 10)
 
     def callback_vel(self, msg):
         #self.get_logger().info('Callback received a velocity message.')
         #self.get_logger().info('I heard: "%s"' % msg.linear.x)
-        self.target_linear_vel = - msg.linear.x
+        self.target_linear_vel = msg.linear.x #前輪駆動の場合はマイナス
         self.target_angular_vel = msg.angular.z
 
     def find_odrive(self):

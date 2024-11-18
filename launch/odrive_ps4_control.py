@@ -41,7 +41,7 @@ def generate_launch_description():
         Node(
             package='odrive_ros2_control',
             executable='control_odrive',
-            name='odrive_twist_driver',
+            name='odrive_odom_pub',
             output='screen'
         ),
         Node(
