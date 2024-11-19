@@ -40,7 +40,7 @@ def generate_launch_description():
         ),
         Node(
             package='odrive_ros2_control',
-            executable='control_odrive',
+            executable='control_odrive_and_odom_pub',
             name='odrive_odom_pub',
             output='screen'
         ),
