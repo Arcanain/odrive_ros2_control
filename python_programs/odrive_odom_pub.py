@@ -47,7 +47,7 @@ class OdriveMotorControl(Node):
         # store current location to be updated. 
         self.x = 0.0     #[m]
         self.y = 0.0     #[m]
-        self.theta = math.pi #[rad]
+        self.theta = 0.0 #[rad]
         #self.theta = 0.0 #[rad]
 
         
@@ -57,8 +57,7 @@ class OdriveMotorControl(Node):
         # https://qiita.com/honeytrap15/items/550c757f2964b575883c
         #self.odom_frame = rospy.get_param('~odom_frame', "odom")
         #self.base_frame = rospy.get_param('~base_frame', "base_link")
-
-        self.odom_frame = "map"
+        self.odom_frame = "odom"
         self.base_frame = "base_link"
 
         self.odom_msg = Odometry()
@@ -86,6 +85,9 @@ class OdriveMotorControl(Node):
 
         # publish odom
         self.odom_publisher = self.create_publisher(Odometry, "odrive_odom", 10)
+
+        # TF Broadcaster for odom -> base_link
+        self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
 
     def callback_vel(self, msg):
         #self.get_logger().info('Callback received a velocity message.')
@@ -206,6 +208,7 @@ class OdriveMotorControl(Node):
         w = self.tire_circumference * (self.vel_r - self.vel_l) / (self.tire_tread * self.encoder_cpr) # angle: vel_r*tyre_radius - vel_l*tyre_radius
         #print(v)
         #sprint(w)
+        self.get_logger().info("Connect to Odrive Success!!!")
         
         ####################
         # Publish Odometry #
@@ -219,6 +222,27 @@ class OdriveMotorControl(Node):
         self.odom_msg.twist.twist.linear.x  = v
         self.odom_msg.twist.twist.angular.z = w
         self.odom_publisher.publish(self.odom_msg)
+
+        ####################
+        # Broadcast TF odom -> base_link
+        ####################
+        t = TransformStamped()
+        t.header.stamp = current_time
+        t.header.frame_id = self.odom_frame  # "odom"に設定
+        t.child_frame_id = self.base_frame   # "base_link"に設定
+
+        t.transform.translation.x = self.x
+        t.transform.translation.y = self.y
+        t.transform.translation.z = 0.0
+
+        q = tf_transformations.quaternion_from_euler(0.0, 0.0, self.theta)
+        t.transform.rotation.x = q[0]
+        t.transform.rotation.y = q[1]
+        t.transform.rotation.z = q[2]
+        t.transform.rotation.w = q[3]
+
+        # Broadcast the transform
+        self.tf_broadcaster.sendTransform(t)
     
     def fini(self):
         self.get_logger().info("shutdown...")
