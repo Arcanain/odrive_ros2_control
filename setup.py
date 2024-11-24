@@ -34,6 +34,7 @@ setup(
             'my_listener= python_programs.listener:main',
             'control_odrive= python_programs.odrive_twist_driver:main',
             'control_odrive_and_odom_pub= python_programs.odrive_odom_pub:main',
+            'control_odrive_and_odom_pub_2= python_programs.odrive_odom_pub_2:main',
         ],
     },
 )
