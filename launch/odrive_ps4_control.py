@@ -13,20 +13,6 @@ def generate_launch_description():
         robot_description = file.read()
     return LaunchDescription([
         Node(
-            package='robot_state_publisher',
-            executable='robot_state_publisher',
-            name='robot_state_publisher',
-            output='both',
-            parameters=[{'robot_description': robot_description}]
-        ),
-        Node(
-            package='joint_state_publisher',
-            executable='joint_state_publisher',
-            name='joint_state_publisher',
-            output='both',
-            parameters=[{'joint_state_publisher': robot_description}]
-        ),
-        Node(
             package='joy_linux',
             executable='joy_linux_node',
             name='joy_linux_node',

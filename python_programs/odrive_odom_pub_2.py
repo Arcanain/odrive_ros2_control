@@ -47,8 +47,8 @@ class OdriveMotorControl(Node):
         # store current location to be updated. 
         self.x = 0.0     #[m]
         self.y = 0.0     #[m]
-        #self.theta = 3.14 #[rad]
         self.theta = 0.0 #[rad]
+        #self.theta = 0.0 #[rad]
 
         
         self.poses_list = []
@@ -222,7 +222,7 @@ class OdriveMotorControl(Node):
         self.odom_msg.twist.twist.linear.x  = v
         self.odom_msg.twist.twist.angular.z = w
         self.odom_publisher.publish(self.odom_msg)
-        
+        '''
         ####################
         # Broadcast TF odom -> base_link
         ####################
@@ -243,7 +243,7 @@ class OdriveMotorControl(Node):
 
         # Broadcast the transform
         self.tf_broadcaster.sendTransform(t)
-        
+        '''
     
     def fini(self):
         self.get_logger().info("shutdown...")
