@@ -13,6 +13,10 @@ setup(
         'python_programs.listener',
         'python_programs.odrive_twist_driver',
         'python_programs.odrive_odom_pub',
+        'python_programs.odrive_odom_pub_gps',
+        'python_programs.odrive_use_imu',
+        'python_programs.odrive_use_imu_pi',
+        'python_programs.odrive_use_imu_tf',
     ],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -34,7 +38,10 @@ setup(
             'my_listener= python_programs.listener:main',
             'control_odrive= python_programs.odrive_twist_driver:main',
             'control_odrive_and_odom_pub= python_programs.odrive_odom_pub:main',
-            'control_odrive_and_odom_pub_2= python_programs.odrive_odom_pub_2:main',
+            'control_odrive_and_odom_pub_gps= python_programs.odrive_odom_pub_gps:main',
+            'control_odrive_use_imu= python_programs.odrive_use_imu:main',
+            'control_odrive_use_imu_pi= python_programs.odrive_use_imu_pi:main',
+            'control_odrive_use_imu_tf= python_programs.odrive_use_imu_tf:main',
         ],
     },
 )
