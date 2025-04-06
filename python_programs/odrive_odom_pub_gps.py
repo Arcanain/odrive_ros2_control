@@ -47,7 +47,7 @@ class OdriveMotorControl(Node):
         # store current location to be updated. 
         self.x = 0.0     #[m]
         self.y = 0.0     #[m]
-        #self.theta = 3.14 #[rad]
+        #self.theta = math.pi #[rad]
         self.theta = 0.0 #[rad]
 
         
@@ -222,7 +222,7 @@ class OdriveMotorControl(Node):
         self.odom_msg.twist.twist.linear.x  = v
         self.odom_msg.twist.twist.angular.z = w
         self.odom_publisher.publish(self.odom_msg)
-        
+        '''
         ####################
         # Broadcast TF odom -> base_link
         ####################
@@ -243,7 +243,7 @@ class OdriveMotorControl(Node):
 
         # Broadcast the transform
         self.tf_broadcaster.sendTransform(t)
-    
+        '''
     
     def fini(self):
         self.get_logger().info("shutdown...")
@@ -251,7 +251,6 @@ class OdriveMotorControl(Node):
         self.odrv0.axis1.controller.input_vel = 0
         self.odrv0.axis0.requested_state = AXIS_STATE_IDLE
         self.odrv0.axis1.requested_state = AXIS_STATE_IDLE
-    
 
 def main(args=None):
     rclpy.init(args=args)

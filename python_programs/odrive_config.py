@@ -44,16 +44,20 @@ class OdriveConfiguration:
         self.odrv0.axis1.encoder.config.cpr = 90
         self.odrv0.axis1.encoder.config.calib_scan_distance = 150
 
+        pGain = 0.5
+        dGain = 0.09
+        iGain = 0.7
+
         self.odrv0.axis0.encoder.config.bandwidth = 100
-        self.odrv0.axis0.controller.config.pos_gain = 1
-        self.odrv0.axis0.controller.config.vel_gain = 0.02 * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis0.encoder.config.cpr
-        self.odrv0.axis0.controller.config.vel_integrator_gain = 0.1 * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis0.encoder.config.cpr
+        self.odrv0.axis0.controller.config.pos_gain = pGain
+        self.odrv0.axis0.controller.config.vel_gain = dGain * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis0.encoder.config.cpr
+        self.odrv0.axis0.controller.config.vel_integrator_gain = iGain * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis0.encoder.config.cpr
         self.odrv0.axis0.controller.config.vel_limit = 10
 
         self.odrv0.axis1.encoder.config.bandwidth = 100
-        self.odrv0.axis1.controller.config.pos_gain = 1
-        self.odrv0.axis1.controller.config.vel_gain = 0.02 * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis1.encoder.config.cpr
-        self.odrv0.axis1.controller.config.vel_integrator_gain = 0.1 * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis1.encoder.config.cpr
+        self.odrv0.axis1.controller.config.pos_gain = pGain
+        self.odrv0.axis1.controller.config.vel_gain = dGain * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis1.encoder.config.cpr
+        self.odrv0.axis1.controller.config.vel_integrator_gain = iGain * self.odrv0.axis0.motor.config.torque_constant * self.odrv0.axis1.encoder.config.cpr
         self.odrv0.axis1.controller.config.vel_limit = 10
 
         self.odrv0.axis0.controller.config.control_mode = CONTROL_MODE_VELOCITY_CONTROL
